@@ -1,0 +1,30 @@
+{
+    "name": "brick/date-time-doctrine",
+    "description": "Doctrine type mappings for brick/date-time",
+    "type": "library",
+    "keywords": [
+        "Brick",
+        "DateTime",
+        "Doctrine"
+    ],
+    "license": "MIT",
+    "require": {
+        "brick/date-time": "~0.2.0",
+        "doctrine/orm": "^2.0.0",
+        "php": "^7.1 || ^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5.15 || ^8.0 || ^9.0",
+        "php-coveralls/php-coveralls": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brick\\DateTime\\Doctrine\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brick\\DateTime\\Doctrine\\Tests\\": "tests/"
+        }
+    }
+}
