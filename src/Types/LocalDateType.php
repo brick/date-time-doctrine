@@ -22,9 +22,9 @@ final class LocalDateType extends Type
         return 'LocalDate';
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getDateTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getDateTypeDeclarationSQL($column);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)

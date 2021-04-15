@@ -9,6 +9,9 @@ namespace Brick\DateTime\Doctrine;
  */
 final class UnexpectedValueException extends \UnexpectedValueException
 {
+    /**
+     * @param mixed $actualValue
+     */
     public function __construct(string $expectedType, $actualValue)
     {
         $type = is_object($actualValue) ? get_class($actualValue) : gettype($actualValue);

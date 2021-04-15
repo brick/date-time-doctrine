@@ -22,9 +22,9 @@ final class LocalTimeType extends Type
         return 'LocalTime';
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getTimeTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getTimeTypeDeclarationSQL($column);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)

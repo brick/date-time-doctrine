@@ -22,9 +22,9 @@ final class DayOfWeekType extends Type
         return 'DayOfWeek';
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getSmallIntTypeDeclarationSQL($column);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)

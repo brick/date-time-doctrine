@@ -22,9 +22,9 @@ final class InstantType extends Type
         return 'Instant';
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getIntegerTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getIntegerTypeDeclarationSQL($column);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
