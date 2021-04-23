@@ -44,8 +44,6 @@ class TypesTest extends AbstractTest
      */
     public function testSaveNull(Connection $connection): Connection
     {
-        $this->expectNotToPerformAssertions();
-
         $em = self::createEntityManager($connection);
         self::truncateEntityTable($em);
 
@@ -53,6 +51,9 @@ class TypesTest extends AbstractTest
 
         $em->persist($entity);
         $em->flush();
+
+        // https://github.com/sebastianbergmann/phpunit/issues/3016
+        self::assertTrue(true);
 
         return $connection;
     }
@@ -80,8 +81,6 @@ class TypesTest extends AbstractTest
      */
     public function testSaveValues(Connection $connection): Connection
     {
-        $this->expectNotToPerformAssertions();
-
         $em = self::createEntityManager($connection);
         self::truncateEntityTable($em);
 
@@ -95,6 +94,9 @@ class TypesTest extends AbstractTest
 
         $em->persist($entity);
         $em->flush();
+
+        // https://github.com/sebastianbergmann/phpunit/issues/3016
+        self::assertTrue(true);
 
         return $connection;
     }
