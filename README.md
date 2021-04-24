@@ -5,6 +5,9 @@ brick/date-time-doctrine
 
 Doctrine type mappings for [brick/date-time](https://github.com/brick/date-time).
 
+[![Build Status](https://github.com/brick/date-time-doctrine/workflows/CI/badge.svg)](https://github.com/brick/date-time-doctrine/actions)
+[![Coverage Status](https://coveralls.io/repos/github/brick/date-time-doctrine/badge.svg?branch=master)](https://coveralls.io/github/brick/date-time-doctrine?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/brick/date-time-doctrine/v/stable)](https://packagist.org/packages/brick/date-time-doctrine)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
 Introduction
