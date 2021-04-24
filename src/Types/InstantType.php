@@ -7,6 +7,7 @@ namespace Brick\DateTime\Doctrine\Types;
 use Brick\DateTime\Instant;
 use Brick\DateTime\Doctrine\UnexpectedValueException;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -51,7 +52,7 @@ final class InstantType extends Type
 
     public function getBindingType()
     {
-        return \PDO::PARAM_INT;
+        return ParameterType::INTEGER;
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform)
