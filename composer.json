@@ -9,8 +9,8 @@
     ],
     "license": "MIT",
     "require": {
-        "brick/date-time": "~0.2.0",
-        "doctrine/orm": "^2.0.0",
+        "brick/date-time": "~0.1.0 || ~0.2.0",
+        "doctrine/orm": "^2.6.0",
         "php": "^7.1 || ^8.0"
     },
     "require-dev": {

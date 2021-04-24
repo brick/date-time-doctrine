@@ -39,7 +39,7 @@ abstract class AbstractTest extends TestCase
     final protected static function truncateEntityTable(EntityManager $em): void
     {
         $em->createQueryBuilder()
-            ->delete(KitchenSink::class)
+            ->delete(KitchenSink::class, 's')
             ->getQuery()
             ->execute();
     }

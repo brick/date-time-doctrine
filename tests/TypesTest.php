@@ -23,18 +23,17 @@ class TypesTest extends AbstractTest
 
         $classMetadata = $entityManager->getClassMetadata(KitchenSink::class);
 
-        $expectedSQL =
-            "CREATE TABLE KitchenSink (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL" .
-            ", dayOfWeek SMALLINT DEFAULT NULL --(DC2Type:DayOfWeek)\n" .
-            ", instant INTEGER DEFAULT NULL --(DC2Type:Instant)\n" .
-            ", localDate DATE DEFAULT NULL --(DC2Type:LocalDate)\n" .
-            ", localTime TIME DEFAULT NULL --(DC2Type:LocalTime)\n" .
-            ", localDateTime DATETIME DEFAULT NULL --(DC2Type:LocalDateTime)\n" .
-            ")";
+        $sql = $schemaTool->getUpdateSchemaSql([$classMetadata]);
+        self::assertCount(1, $sql);
+        $sql = $sql[0];
 
-        self::assertSame([$expectedSQL], $schemaTool->getUpdateSchemaSql([$classMetadata]));
+        self::assertStringContainsString('dayOfWeek SMALLINT DEFAULT NULL --(DC2Type:DayOfWeek)', $sql);
+        self::assertStringContainsString('instant INTEGER DEFAULT NULL --(DC2Type:Instant)', $sql);
+        self::assertStringContainsString('localDate DATE DEFAULT NULL --(DC2Type:LocalDate)', $sql);
+        self::assertStringContainsString('localTime TIME DEFAULT NULL --(DC2Type:LocalTime)', $sql);
+        self::assertStringContainsString('localDateTime DATETIME DEFAULT NULL --(DC2Type:LocalDateTime)', $sql);
 
-        $connection->exec($expectedSQL);
+        $connection->exec($sql);
 
         return $connection;
     }
