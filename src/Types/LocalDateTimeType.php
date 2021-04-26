@@ -33,7 +33,13 @@ final class LocalDateTimeType extends Type
         }
 
         if ($value instanceof LocalDateTime) {
-            return (string) $value;
+            $stringValue = str_replace('T', ' ', (string) $value);
+
+            if ($value->getSecond() === 0 && $value->getNano() === 0) {
+                $stringValue .= ':00';
+            }
+
+            return $stringValue;
         }
 
         throw ConversionException::conversionFailedInvalidType(

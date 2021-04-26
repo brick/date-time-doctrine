@@ -33,7 +33,13 @@ final class LocalTimeType extends Type
         }
 
         if ($value instanceof LocalTime) {
-            return (string) $value;
+            $stringValue = (string) $value;
+
+            if ($value->getSecond() === 0 && $value->getNano() === 0) {
+                $stringValue .= ':00';
+            }
+
+            return $stringValue;
         }
 
         throw ConversionException::conversionFailedInvalidType(
