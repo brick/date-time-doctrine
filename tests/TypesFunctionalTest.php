@@ -13,7 +13,7 @@ use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Tools\SchemaTool;
 
-class TypesTest extends AbstractTest
+class TypesFunctionalTest extends AbstractFunctionalTest
 {
     public function testCreateSchema(): Connection
     {
