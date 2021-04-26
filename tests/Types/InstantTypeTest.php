@@ -10,17 +10,23 @@ use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 class InstantTypeTest extends TestCase
 {
+    private function getInstantType(): InstantType
+    {
+        return Type::getType('Instant');
+    }
+
     /**
      * @dataProvider providerConvertToDatabaseValue
      */
     public function testConvertToDatabaseValue(?Instant $value, ?int $expectedValue): void
     {
-        $type = new InstantType();
+        $type = $this->getInstantType();
         $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
@@ -40,7 +46,7 @@ class InstantTypeTest extends TestCase
      */
     public function testConvertToDatabaseValueWithInvalidValue($value): void
     {
-        $type = new InstantType();
+        $type = $this->getInstantType();
 
         $this->expectException(ConversionException::class);
         $type->convertToDatabaseValue($value, new SqlitePlatform());
@@ -64,7 +70,7 @@ class InstantTypeTest extends TestCase
      */
     public function testConvertToPHPValue($value, ?int $expectedEpochSecond): void
     {
-        $type = new InstantType();
+        $type = $this->getInstantType();
         $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
 
         if ($expectedEpochSecond === null) {

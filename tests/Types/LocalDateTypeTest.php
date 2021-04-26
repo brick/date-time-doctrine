@@ -9,7 +9,6 @@ use Brick\DateTime\Doctrine\Types\LocalDateType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -18,12 +17,17 @@ use stdClass;
 
 class LocalDateTypeTest extends TestCase
 {
+    private function getLocalDateType(): LocalDateType
+    {
+        return Type::getType('LocalDate');
+    }
+
     /**
      * @dataProvider providerConvertToDatabaseValue
      */
     public function testConvertToDatabaseValue(?LocalDate $value, ?string $expectedValue): void
     {
-        $type = new LocalDateType();
+        $type = $this->getLocalDateType();
         $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
@@ -42,7 +46,7 @@ class LocalDateTypeTest extends TestCase
      */
     public function testConvertToDatabaseValueWithInvalidValue($value): void
     {
-        $type = new LocalDateType();
+        $type = $this->getLocalDateType();
 
         $this->expectException(ConversionException::class);
         $type->convertToDatabaseValue($value, new SqlitePlatform());
@@ -66,7 +70,7 @@ class LocalDateTypeTest extends TestCase
      */
     public function testConvertToPHPValue($value, ?string $expectedLocalDateString): void
     {
-        $type = new LocalDateType();
+        $type = $this->getLocalDateType();
         $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
 
         if ($expectedLocalDateString === null) {
@@ -90,7 +94,7 @@ class LocalDateTypeTest extends TestCase
      */
     public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
     {
-        $type = new LocalDateType();
+        $type = $this->getLocalDateType();
 
         $this->expectException($expectedExceptionClass);
         $type->convertToPHPValue($value, new SqlitePlatform());

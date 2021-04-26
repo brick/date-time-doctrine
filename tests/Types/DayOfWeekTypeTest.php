@@ -11,17 +11,23 @@ use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 class DayOfWeekTypeTest extends TestCase
 {
+    private function getDayOfWeekType(): DayOfWeekType
+    {
+        return Type::getType('DayOfWeek');
+    }
+
     /**
      * @dataProvider providerConvertToDatabaseValue
      */
     public function testConvertToDatabaseValue(?DayOfWeek $value, ?int $expectedValue): void
     {
-        $type = new DayOfWeekType();
+        $type = $this->getDayOfWeekType();
         $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
@@ -46,7 +52,7 @@ class DayOfWeekTypeTest extends TestCase
      */
     public function testConvertToDatabaseValueWithInvalidValue($value): void
     {
-        $type = new DayOfWeekType();
+        $type = $this->getDayOfWeekType();
 
         $this->expectException(ConversionException::class);
         $type->convertToDatabaseValue($value, new SqlitePlatform());
@@ -70,7 +76,7 @@ class DayOfWeekTypeTest extends TestCase
      */
     public function testConvertToPHPValue($value, ?int $expectedDayOfWeekValue): void
     {
-        $type = new DayOfWeekType();
+        $type = $this->getDayOfWeekType();
         $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
 
         if ($expectedDayOfWeekValue === null) {
@@ -107,7 +113,7 @@ class DayOfWeekTypeTest extends TestCase
      */
     public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
     {
-        $type = new DayOfWeekType();
+        $type = $this->getDayOfWeekType();
 
         $this->expectException($expectedExceptionClass);
         $type->convertToPHPValue($value, new SqlitePlatform());
