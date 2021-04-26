@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\LocalTime;
-use Brick\DateTime\Doctrine\UnexpectedValueException;
-
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -37,7 +36,11 @@ final class LocalTimeType extends Type
             return (string) $value;
         }
 
-        throw new UnexpectedValueException(LocalTime::class, $value);
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getName(),
+            [LocalTime::class, 'null']
+        );
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\DayOfWeek;
-use Brick\DateTime\Doctrine\UnexpectedValueException;
-
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -38,7 +37,11 @@ final class DayOfWeekType extends Type
             return $value->getValue();
         }
 
-        throw new UnexpectedValueException(DayOfWeek::class, $value);
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getName(),
+            [DayOfWeek::class, 'null']
+        );
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
