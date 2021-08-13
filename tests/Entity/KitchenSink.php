@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Brick\DateTime\Doctrine\Tests\Entity;
 
 use Brick\DateTime\DayOfWeek;
+use Brick\DateTime\Duration;
 use Brick\DateTime\Instant;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
+use Brick\DateTime\Period;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -59,4 +61,18 @@ class KitchenSink
      * @var LocalDateTime|null
      */
     public $localDateTime = null;
+
+    /**
+     * @ORM\Column(type="Duration", nullable=true)
+     *
+     * @var Duration|null
+     */
+    public $duration = null;
+
+    /**
+     * @ORM\Column(type="Period", nullable=true)
+     *
+     * @var Period|null
+     */
+    public $period = null;
 }

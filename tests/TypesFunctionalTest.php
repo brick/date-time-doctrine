@@ -6,10 +6,12 @@ namespace Brick\DateTime\Doctrine\Tests;
 
 use Brick\DateTime\DayOfWeek;
 use Brick\DateTime\Doctrine\Tests\Entity\KitchenSink;
+use Brick\DateTime\Duration;
 use Brick\DateTime\Instant;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
+use Brick\DateTime\Period;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -32,6 +34,8 @@ class TypesFunctionalTest extends AbstractFunctionalTest
         self::assertStringContainsString('localDate DATE DEFAULT NULL --(DC2Type:LocalDate)', $sql);
         self::assertStringContainsString('localTime TIME DEFAULT NULL --(DC2Type:LocalTime)', $sql);
         self::assertStringContainsString('localDateTime DATETIME DEFAULT NULL --(DC2Type:LocalDateTime)', $sql);
+        self::assertStringContainsString('duration VARCHAR(64) DEFAULT NULL --(DC2Type:Duration)', $sql);
+        self::assertStringContainsString('period VARCHAR(64) DEFAULT NULL --(DC2Type:Period)', $sql);
 
         $connection->exec($sql);
 
@@ -73,6 +77,8 @@ class TypesFunctionalTest extends AbstractFunctionalTest
         self::assertNull($entity->localDate);
         self::assertNull($entity->localTime);
         self::assertNull($entity->localDateTime);
+        self::assertNull($entity->duration);
+        self::assertNull($entity->period);
     }
 
     /**
@@ -90,6 +96,8 @@ class TypesFunctionalTest extends AbstractFunctionalTest
         $entity->localDate = LocalDate::parse('2021-04-17');
         $entity->localTime = LocalTime::parse('06:31:45');
         $entity->localDateTime = LocalDateTime::parse('2017-01-16T10:01:02');
+        $entity->duration = Duration::ofSeconds(7230, 123456789);
+        $entity->period = Period::of(1, 3, 15);
 
         $em->persist($entity);
         $em->flush();
@@ -126,5 +134,11 @@ class TypesFunctionalTest extends AbstractFunctionalTest
 
         self::assertInstanceOf(LocalDateTime::class, $entity->localDateTime);
         self::assertSame('2017-01-16T10:01:02', (string) $entity->localDateTime);
+
+        self::assertInstanceOf(Duration::class, $entity->duration);
+        self::assertSame('PT2H30.123456789S', (string) $entity->duration);
+
+        self::assertInstanceOf(Period::class, $entity->period);
+        self::assertSame('P1Y3M15D', (string) $entity->period);
     }
 }
