@@ -16,17 +16,17 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class LocalDateType extends Type
 {
-    public function getName()
+    public function getName(): string
     {
         return 'LocalDate';
     }
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getDateTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -43,7 +43,7 @@ final class LocalDateType extends Type
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?LocalDate
     {
         if ($value === null) {
             return null;
@@ -52,7 +52,7 @@ final class LocalDateType extends Type
         return LocalDate::parse((string) $value);
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

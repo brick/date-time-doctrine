@@ -16,17 +16,17 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class LocalTimeType extends Type
 {
-    public function getName()
+    public function getName(): string
     {
         return 'LocalTime';
     }
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getTimeTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -49,7 +49,7 @@ final class LocalTimeType extends Type
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?LocalTime
     {
         if ($value === null) {
             return null;
@@ -58,7 +58,7 @@ final class LocalTimeType extends Type
         return LocalTime::parse((string) $value);
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

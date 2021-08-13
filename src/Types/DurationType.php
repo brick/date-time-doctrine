@@ -16,12 +16,12 @@ use Doctrine\DBAL\Types\Type;
  */
 final class DurationType extends Type
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Duration';
     }
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         if (!isset($column['length'])) {
             $column['length'] = 64;
@@ -30,7 +30,7 @@ final class DurationType extends Type
         return $platform->getVarcharTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -47,7 +47,7 @@ final class DurationType extends Type
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Duration
     {
         if ($value === null) {
             return null;
@@ -56,7 +56,7 @@ final class DurationType extends Type
         return Duration::parse((string) $value);
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

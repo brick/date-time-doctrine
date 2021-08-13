@@ -17,17 +17,17 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class DayOfWeekType extends Type
 {
-    public function getName()
+    public function getName(): string
     {
         return 'DayOfWeek';
     }
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getSmallIntTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
             return null;
@@ -44,7 +44,7 @@ final class DayOfWeekType extends Type
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?DayOfWeek
     {
         if ($value === null) {
             return null;
@@ -53,12 +53,12 @@ final class DayOfWeekType extends Type
         return DayOfWeek::of((int) $value);
     }
 
-    public function getBindingType()
+    public function getBindingType(): int
     {
         return ParameterType::INTEGER;
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
