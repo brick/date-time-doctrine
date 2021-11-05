@@ -48,3 +48,5 @@ Package contents
 - [LocalDateTimeType](https://github.com/brick/date-time-doctrine/blob/master/src/Types/LocalDateTimeType.php)
 - [InstantType](https://github.com/brick/date-time-doctrine/blob/master/src/Types/InstantType.php)
 - [DayOfWeekType](https://github.com/brick/date-time-doctrine/blob/master/src/Types/DayOfWeekType.php)
+- [DurationType](https://github.com/brick/date-time-doctrine/blob/master/src/Types/DurationType.php)
+- [PeriodType](https://github.com/brick/date-time-doctrine/blob/master/src/Types/PeriodType.php)
