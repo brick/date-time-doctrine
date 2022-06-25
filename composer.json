@@ -19,7 +19,7 @@
         "ext-pdo_sqlite": "*",
         "phpunit/phpunit": "^7.5.15 || ^8.0 || ^9.0",
         "php-coveralls/php-coveralls": "^2.4",
-        "vimeo/psalm": "4.15.0",
+        "vimeo/psalm": "4.23.0",
         "doctrine/annotations": "^1.0"
     },
     "autoload": {
