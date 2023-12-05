@@ -34,7 +34,7 @@ final class DayOfWeekType extends Type
         }
 
         if ($value instanceof DayOfWeek) {
-            return $value->getValue();
+            return $value->value;
         }
 
         throw ConversionException::conversionFailedInvalidType(
@@ -50,7 +50,15 @@ final class DayOfWeekType extends Type
             return null;
         }
 
-        return DayOfWeek::of((int) $value);
+        if (is_int($value)) {
+            return DayOfWeek::from($value);
+        }
+
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getName(),
+            ['int', 'null']
+        );
     }
 
     public function getBindingType(): int

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
-use Brick\DateTime\DateTimeException;
 use Brick\DateTime\DayOfWeek;
 use Brick\DateTime\Doctrine\Types\DayOfWeekType;
 use Brick\DateTime\LocalDate;
@@ -14,6 +13,7 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use ValueError;
 
 class DayOfWeekTypeTest extends TestCase
 {
@@ -37,13 +37,13 @@ class DayOfWeekTypeTest extends TestCase
     {
         return [
             [null, null],
-            [DayOfWeek::monday(), 1],
-            [DayOfWeek::tuesday(), 2],
-            [DayOfWeek::wednesday(), 3],
-            [DayOfWeek::thursday(), 4],
-            [DayOfWeek::friday(), 5],
-            [DayOfWeek::saturday(), 6],
-            [DayOfWeek::sunday(), 7],
+            [DayOfWeek::MONDAY, 1],
+            [DayOfWeek::TUESDAY, 2],
+            [DayOfWeek::WEDNESDAY, 3],
+            [DayOfWeek::THURSDAY, 4],
+            [DayOfWeek::FRIDAY, 5],
+            [DayOfWeek::SATURDAY, 6],
+            [DayOfWeek::SUNDAY, 7],
         ];
     }
 
@@ -83,7 +83,7 @@ class DayOfWeekTypeTest extends TestCase
             self::assertNull($actualValue);
         } else {
             self::assertInstanceOf(DayOfWeek::class, $actualValue);
-            self::assertSame($expectedDayOfWeekValue, $actualValue->getValue());
+            self::assertSame($expectedDayOfWeekValue, $actualValue->value);
         }
     }
 
@@ -98,13 +98,6 @@ class DayOfWeekTypeTest extends TestCase
             [5, 5],
             [6, 6],
             [7, 7],
-            ['1', 1],
-            ['2', 2],
-            ['3', 3],
-            ['4', 4],
-            ['5', 5],
-            ['6', 6],
-            ['7', 7],
         ];
     }
 
@@ -122,10 +115,10 @@ class DayOfWeekTypeTest extends TestCase
     public function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, DateTimeException::class],
-            [8, DateTimeException::class],
-            ['0', DateTimeException::class],
-            ['8', DateTimeException::class],
+            [0, ValueError::class],
+            [8, ValueError::class],
+            ['1', ConversionException::class],
+            ['2', ConversionException::class],
         ];
     }
 }
