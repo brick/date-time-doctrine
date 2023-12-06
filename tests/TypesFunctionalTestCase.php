@@ -15,7 +15,7 @@ use Brick\DateTime\Period;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Tools\SchemaTool;
 
-class TypesFunctionalTest extends AbstractFunctionalTest
+class TypesFunctionalTestCase extends AbstractFunctionalTestCase
 {
     public function testCreateSchema(): Connection
     {

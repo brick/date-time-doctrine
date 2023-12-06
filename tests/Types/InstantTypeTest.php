@@ -32,7 +32,7 @@ class InstantTypeTest extends TestCase
         self::assertSame($expectedValue, $actualValue);
     }
 
-    public function providerConvertToDatabaseValue(): array
+    public static function providerConvertToDatabaseValue(): array
     {
         return [
             [null, null],
@@ -52,7 +52,7 @@ class InstantTypeTest extends TestCase
         $type->convertToDatabaseValue($value, new SqlitePlatform());
     }
 
-    public function providerConvertToDatabaseValueWithInvalidValue(): array
+    public static function providerConvertToDatabaseValueWithInvalidValue(): array
     {
         return [
             [123],
@@ -81,7 +81,7 @@ class InstantTypeTest extends TestCase
         }
     }
 
-    public function providerConvertToPHPValue(): array
+    public static function providerConvertToPHPValue(): array
     {
         return [
             [null, null],

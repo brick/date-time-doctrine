@@ -11,7 +11,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractFunctionalTest extends TestCase
+abstract class AbstractFunctionalTestCase extends TestCase
 {
     final protected static function createConnection(): Connection
     {
