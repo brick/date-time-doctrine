@@ -57,7 +57,7 @@ final class DayOfWeekType extends Type
         throw ConversionException::conversionFailedInvalidType(
             $value,
             $this->getName(),
-            ['int', 'null']
+            [DayOfWeek::class, 'null']
         );
     }
 
