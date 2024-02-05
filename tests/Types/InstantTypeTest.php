@@ -41,7 +41,7 @@ class InstantTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getInstantType();
 
@@ -63,7 +63,7 @@ class InstantTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValue')]
-    public function testConvertToPHPValue($value, ?int $expectedEpochSecond): void
+    public function testConvertToPHPValue(mixed $value, ?int $expectedEpochSecond): void
     {
         $type = $this->getInstantType();
         $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());

@@ -47,7 +47,7 @@ class DayOfWeekTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getDayOfWeekType();
 
@@ -69,7 +69,7 @@ class DayOfWeekTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValue')]
-    public function testConvertToPHPValue($value, ?int $expectedDayOfWeekValue): void
+    public function testConvertToPHPValue(mixed $value, ?int $expectedDayOfWeekValue): void
     {
         $type = $this->getDayOfWeekType();
         $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
@@ -97,7 +97,7 @@ class DayOfWeekTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
-    public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionClass): void
     {
         $type = $this->getDayOfWeekType();
 
