@@ -12,6 +12,7 @@ use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,9 +23,7 @@ class DurationTypeTest extends TestCase
         return Type::getType('Duration');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?Duration $value, ?string $expectedValue): void
     {
         $type = $this->getDurationType();
@@ -41,9 +40,7 @@ class DurationTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
     public function testConvertToDatabaseValueWithInvalidValue($value): void
     {
         $type = $this->getDurationType();
@@ -65,9 +62,7 @@ class DurationTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
+    #[DataProvider('providerConvertToPHPValue')]
     public function testConvertToPHPValue($value, ?string $expectedDurationString): void
     {
         $type = $this->getDurationType();
@@ -89,9 +84,7 @@ class DurationTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
     public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
     {
         $type = $this->getDurationType();
