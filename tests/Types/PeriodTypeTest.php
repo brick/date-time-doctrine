@@ -12,6 +12,7 @@ use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,9 +23,7 @@ class PeriodTypeTest extends TestCase
         return Type::getType('Period');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?Period $value, ?string $expectedValue): void
     {
         $type = $this->getPeriodType();
@@ -41,9 +40,7 @@ class PeriodTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
     public function testConvertToDatabaseValueWithInvalidValue($value): void
     {
         $type = $this->getPeriodType();
@@ -65,9 +62,7 @@ class PeriodTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
+    #[DataProvider('providerConvertToPHPValue')]
     public function testConvertToPHPValue($value, ?string $expectedPeriodString): void
     {
         $type = $this->getPeriodType();
@@ -89,9 +84,7 @@ class PeriodTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
     public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
     {
         $type = $this->getPeriodType();

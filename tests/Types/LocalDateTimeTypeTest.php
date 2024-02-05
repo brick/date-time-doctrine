@@ -12,6 +12,7 @@ use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,9 +23,7 @@ class LocalDateTimeTypeTest extends TestCase
         return Type::getType('LocalDateTime');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalDateTime $value, ?string $expectedValue): void
     {
         $type = $this->getLocalDateTimeType();
@@ -43,9 +42,7 @@ class LocalDateTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
     public function testConvertToDatabaseValueWithInvalidValue($value): void
     {
         $type = $this->getLocalDateTimeType();
@@ -68,9 +65,7 @@ class LocalDateTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
+    #[DataProvider('providerConvertToPHPValue')]
     public function testConvertToPHPValue($value, ?string $expectedLocalDateTimeString): void
     {
         $type = $this->getLocalDateTimeType();
@@ -95,9 +90,7 @@ class LocalDateTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
     public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
     {
         $type = $this->getLocalDateTimeType();

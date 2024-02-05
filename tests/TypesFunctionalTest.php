@@ -14,6 +14,7 @@ use Brick\DateTime\LocalTime;
 use Brick\DateTime\Period;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Tools\SchemaTool;
+use PHPUnit\Framework\Attributes\Depends;
 
 class TypesFunctionalTest extends AbstractFunctionalTestCase
 {
@@ -42,9 +43,7 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         return $connection;
     }
 
-    /**
-     * @depends testCreateSchema
-     */
+    #[Depends('testCreateSchema')]
     public function testSaveNull(Connection $connection): Connection
     {
         $em = self::createEntityManager($connection);
@@ -61,9 +60,7 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         return $connection;
     }
 
-    /**
-     * @depends testSaveNull
-     */
+    #[Depends('testSaveNull')]
     public function testLoadNull(Connection $connection): void
     {
         $em = self::createEntityManager($connection);
@@ -81,9 +78,7 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         self::assertNull($entity->period);
     }
 
-    /**
-     * @depends testCreateSchema
-     */
+    #[Depends('testCreateSchema')]
     public function testSaveValues(Connection $connection): Connection
     {
         $em = self::createEntityManager($connection);
@@ -108,9 +103,7 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         return $connection;
     }
 
-    /**
-     * @depends testSaveValues
-     */
+    #[Depends('testSaveValues')]
     public function testLoadValues(Connection $connection): void
     {
         $em = self::createEntityManager($connection);
