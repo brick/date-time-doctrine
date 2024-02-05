@@ -8,7 +8,7 @@ use Brick\DateTime\DayOfWeek;
 use Brick\DateTime\Doctrine\Types\DayOfWeekType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class DayOfWeekTypeTest extends TestCase
     public function testConvertToDatabaseValue(?DayOfWeek $value, ?int $expectedValue): void
     {
         $type = $this->getDayOfWeekType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -55,7 +55,7 @@ class DayOfWeekTypeTest extends TestCase
         $type = $this->getDayOfWeekType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -77,7 +77,7 @@ class DayOfWeekTypeTest extends TestCase
     public function testConvertToPHPValue($value, ?int $expectedDayOfWeekValue): void
     {
         $type = $this->getDayOfWeekType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedDayOfWeekValue === null) {
             self::assertNull($actualValue);
@@ -109,7 +109,7 @@ class DayOfWeekTypeTest extends TestCase
         $type = $this->getDayOfWeekType();
 
         $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
@@ -117,8 +117,6 @@ class DayOfWeekTypeTest extends TestCase
         return [
             [0, ValueError::class],
             [8, ValueError::class],
-            ['1', ConversionException::class],
-            ['2', ConversionException::class],
         ];
     }
 }

@@ -9,7 +9,7 @@ use Brick\DateTime\Doctrine\Types\LocalTimeType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
 use Brick\DateTime\LocalDateTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class LocalTimeTypeTest extends TestCase
     public function testConvertToDatabaseValue(?LocalTime $value, ?string $expectedValue): void
     {
         $type = $this->getLocalTimeType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -51,7 +51,7 @@ class LocalTimeTypeTest extends TestCase
         $type = $this->getLocalTimeType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -73,7 +73,7 @@ class LocalTimeTypeTest extends TestCase
     public function testConvertToPHPValue($value, ?string $expectedLocalTimeString): void
     {
         $type = $this->getLocalTimeType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedLocalTimeString === null) {
             self::assertNull($actualValue);
@@ -100,7 +100,7 @@ class LocalTimeTypeTest extends TestCase
         $type = $this->getLocalTimeType();
 
         $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
