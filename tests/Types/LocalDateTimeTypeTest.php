@@ -9,7 +9,7 @@ use Brick\DateTime\Doctrine\Types\LocalDateTimeType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class LocalDateTimeTypeTest extends TestCase
     public function testConvertToDatabaseValue(?LocalDateTime $value, ?string $expectedValue): void
     {
         $type = $this->getLocalDateTimeType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -51,7 +51,7 @@ class LocalDateTimeTypeTest extends TestCase
         $type = $this->getLocalDateTimeType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -74,7 +74,7 @@ class LocalDateTimeTypeTest extends TestCase
     public function testConvertToPHPValue($value, ?string $expectedLocalDateTimeString): void
     {
         $type = $this->getLocalDateTimeType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedLocalDateTimeString === null) {
             self::assertNull($actualValue);
@@ -103,7 +103,7 @@ class LocalDateTimeTypeTest extends TestCase
         $type = $this->getLocalDateTimeType();
 
         $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array

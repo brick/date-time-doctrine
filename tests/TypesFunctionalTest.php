@@ -29,15 +29,15 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         self::assertCount(1, $sql);
         $sql = $sql[0];
 
-        self::assertStringContainsString('dayOfWeek SMALLINT DEFAULT NULL --(DC2Type:DayOfWeek)', $sql);
-        self::assertStringContainsString('instant INTEGER DEFAULT NULL --(DC2Type:Instant)', $sql);
-        self::assertStringContainsString('localDate DATE DEFAULT NULL --(DC2Type:LocalDate)', $sql);
-        self::assertStringContainsString('localTime TIME DEFAULT NULL --(DC2Type:LocalTime)', $sql);
-        self::assertStringContainsString('localDateTime DATETIME DEFAULT NULL --(DC2Type:LocalDateTime)', $sql);
-        self::assertStringContainsString('duration VARCHAR(64) DEFAULT NULL --(DC2Type:Duration)', $sql);
-        self::assertStringContainsString('period VARCHAR(64) DEFAULT NULL --(DC2Type:Period)', $sql);
+        self::assertStringContainsString('dayOfWeek SMALLINT DEFAULT NULL', $sql);
+        self::assertStringContainsString('instant INTEGER DEFAULT NULL', $sql);
+        self::assertStringContainsString('localDate DATE DEFAULT NULL', $sql);
+        self::assertStringContainsString('localTime TIME DEFAULT NULL', $sql);
+        self::assertStringContainsString('localDateTime DATETIME DEFAULT NULL', $sql);
+        self::assertStringContainsString('duration VARCHAR(64) DEFAULT NULL', $sql);
+        self::assertStringContainsString('period VARCHAR(64) DEFAULT NULL', $sql);
 
-        $connection->exec($sql);
+        $connection->executeStatement($sql);
 
         return $connection;
     }

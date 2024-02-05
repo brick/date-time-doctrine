@@ -6,7 +6,7 @@ namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\Instant;
 use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -17,17 +17,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class InstantType extends Type
 {
-    public function getName(): string
-    {
-        return 'Instant';
-    }
-
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getIntegerTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
             return null;
@@ -37,14 +32,14 @@ final class InstantType extends Type
             return $value->getEpochSecond();
         }
 
-        throw ConversionException::conversionFailedInvalidType(
+        throw InvalidType::new(
             $value,
-            $this->getName(),
-            [Instant::class, 'null']
+            static::class,
+            [Instant::class, 'null'],
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?Instant
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Instant
     {
         if ($value === null) {
             return null;
@@ -53,13 +48,8 @@ final class InstantType extends Type
         return Instant::of((int) $value);
     }
 
-    public function getBindingType(): int
+    public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
     }
 }

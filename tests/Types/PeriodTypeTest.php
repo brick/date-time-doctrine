@@ -9,7 +9,7 @@ use Brick\DateTime\Doctrine\Types\PeriodType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\Period;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class PeriodTypeTest extends TestCase
     public function testConvertToDatabaseValue(?Period $value, ?string $expectedValue): void
     {
         $type = $this->getPeriodType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -49,7 +49,7 @@ class PeriodTypeTest extends TestCase
         $type = $this->getPeriodType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -71,7 +71,7 @@ class PeriodTypeTest extends TestCase
     public function testConvertToPHPValue($value, ?string $expectedPeriodString): void
     {
         $type = $this->getPeriodType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedPeriodString === null) {
             self::assertNull($actualValue);
@@ -97,7 +97,7 @@ class PeriodTypeTest extends TestCase
         $type = $this->getPeriodType();
 
         $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array

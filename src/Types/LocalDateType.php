@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\LocalDate;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -16,17 +16,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class LocalDateType extends Type
 {
-    public function getName(): string
-    {
-        return 'LocalDate';
-    }
-
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getDateTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -36,24 +31,19 @@ final class LocalDateType extends Type
             return (string) $value;
         }
 
-        throw ConversionException::conversionFailedInvalidType(
+        throw InvalidType::new(
             $value,
-            $this->getName(),
-            [LocalDate::class, 'null']
+            static::class,
+            [LocalDate::class, 'null'],
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?LocalDate
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?LocalDate
     {
         if ($value === null) {
             return null;
         }
 
         return LocalDate::parse((string) $value);
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
     }
 }
