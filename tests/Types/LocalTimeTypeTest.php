@@ -43,7 +43,7 @@ class LocalTimeTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getLocalTimeType();
 
@@ -65,7 +65,7 @@ class LocalTimeTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValue')]
-    public function testConvertToPHPValue($value, ?string $expectedLocalTimeString): void
+    public function testConvertToPHPValue(mixed $value, ?string $expectedLocalTimeString): void
     {
         $type = $this->getLocalTimeType();
         $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
@@ -88,7 +88,7 @@ class LocalTimeTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
-    public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionClass): void
     {
         $type = $this->getLocalTimeType();
 
