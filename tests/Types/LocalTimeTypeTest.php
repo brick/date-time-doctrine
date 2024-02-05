@@ -38,7 +38,8 @@ class LocalTimeTypeTest extends TestCase
             [null, null],
             [LocalTime::of(9, 2), '09:02:00'],
             [LocalTime::of(10, 31, 1), '10:31:01'],
-            [LocalTime::of(10, 31, 1, 7000000), '10:31:01.007'],
+            [LocalTime::of(10, 31, 0, 7_000_000), '10:31:00.007'],
+            [LocalTime::of(10, 31, 1, 7_000_000), '10:31:01.007'],
         ];
     }
 

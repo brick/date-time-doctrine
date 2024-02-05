@@ -38,7 +38,8 @@ class LocalDateTimeTypeTest extends TestCase
             [null, null],
             [LocalDateTime::of(2021, 4, 17, 9, 2), '2021-04-17 09:02:00'],
             [LocalDateTime::of(2021, 4, 17, 9, 2, 7), '2021-04-17 09:02:07'],
-            [LocalDateTime::of(2021, 4, 17, 9, 2, 0, 7000000), '2021-04-17 09:02:00.007'],
+            [LocalDateTime::of(2021, 4, 17, 9, 2, 0, 7_000_000), '2021-04-17 09:02:00.007'],
+            [LocalDateTime::of(2021, 4, 17, 9, 2, 1, 7_000_000), '2021-04-17 09:02:01.007'],
         ];
     }
 
