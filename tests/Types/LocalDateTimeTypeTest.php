@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
-use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Doctrine\Types\LocalDateTimeType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
@@ -92,21 +91,22 @@ class LocalDateTimeTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
-    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionClass): void
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionMessage): void
     {
         $type = $this->getLocalDateTimeType();
 
-        $this->expectException($expectedExceptionClass);
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, DateTimeException::class],
-            ['01:02:59', DateTimeException::class],
-            ['2021-04-17', DateTimeException::class],
-            ['2021-04-17Z01:02:03.456', DateTimeException::class],
+            [0, 'Failed to parse "0"'],
+            ['01:02:59', 'Failed to parse "01:02:59".'],
+            ['2021-04-17', 'Failed to parse "2021-04-17".'],
+            ['2021-04-17Z01:02:03.456', 'Failed to parse "2021-04-17Z01:02:03.456".'],
         ];
     }
 }

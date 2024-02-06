@@ -7,8 +7,10 @@ namespace Brick\DateTime\Doctrine\Types;
 use Brick\DateTime\DayOfWeek;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use ValueError;
 
 /**
  * Doctrine type for DayOfWeek.
@@ -45,7 +47,16 @@ final class DayOfWeekType extends Type
             return null;
         }
 
-        return DayOfWeek::from((int) $value);
+        try {
+            return DayOfWeek::from((int) $value);
+        } catch (ValueError $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                DayOfWeek::class,
+                $e->getMessage(),
+                $e,
+            );
+        }
     }
 
     public function getBindingType(): ParameterType

@@ -14,7 +14,6 @@ use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use ValueError;
 
 class DayOfWeekTypeTest extends TestCase
 {
@@ -97,19 +96,20 @@ class DayOfWeekTypeTest extends TestCase
     }
 
     #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
-    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionClass): void
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionMessage): void
     {
         $type = $this->getDayOfWeekType();
 
-        $this->expectException($expectedExceptionClass);
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, ValueError::class],
-            [8, ValueError::class],
+            [0, '0 is not a valid backing value for enum'],
+            [8, '8 is not a valid backing value for enum'],
         ];
     }
 }

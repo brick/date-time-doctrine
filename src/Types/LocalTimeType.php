@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Types;
 
+use Brick\DateTime\DateTimeException;
 use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -50,6 +52,15 @@ final class LocalTimeType extends Type
             return null;
         }
 
-        return LocalTime::parse((string) $value);
+        try {
+            return LocalTime::parse((string) $value);
+        } catch (DateTimeException $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                LocalTime::class,
+                $e->getMessage(),
+                $e,
+            );
+        }
     }
 }
