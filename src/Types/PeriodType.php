@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Types;
 
+use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Period;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -48,6 +50,15 @@ final class PeriodType extends Type
             return null;
         }
 
-        return Period::parse((string) $value);
+        try {
+            return Period::parse((string) $value);
+        } catch (DateTimeException $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                Period::class,
+                $e->getMessage(),
+                $e,
+            );
+        }
     }
 }

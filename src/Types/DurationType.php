@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Types;
 
+use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Duration;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -48,6 +50,15 @@ final class DurationType extends Type
             return null;
         }
 
-        return Duration::parse((string) $value);
+        try {
+            return Duration::parse((string) $value);
+        } catch (DateTimeException $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                Duration::class,
+                $e->getMessage(),
+                $e,
+            );
+        }
     }
 }
