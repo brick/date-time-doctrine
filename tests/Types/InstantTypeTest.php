@@ -8,9 +8,10 @@ use Brick\DateTime\Instant;
 use Brick\DateTime\Doctrine\Types\InstantType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -21,13 +22,11 @@ class InstantTypeTest extends TestCase
         return Type::getType('Instant');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?Instant $value, ?int $expectedValue): void
     {
         $type = $this->getInstantType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -41,15 +40,13 @@ class InstantTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getInstantType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -65,13 +62,11 @@ class InstantTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
-    public function testConvertToPHPValue($value, ?int $expectedEpochSecond): void
+    #[DataProvider('providerConvertToPHPValue')]
+    public function testConvertToPHPValue(mixed $value, ?int $expectedEpochSecond): void
     {
         $type = $this->getInstantType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedEpochSecond === null) {
             self::assertNull($actualValue);

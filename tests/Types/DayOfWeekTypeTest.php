@@ -8,12 +8,12 @@ use Brick\DateTime\DayOfWeek;
 use Brick\DateTime\Doctrine\Types\DayOfWeekType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use ValueError;
 
 class DayOfWeekTypeTest extends TestCase
 {
@@ -22,13 +22,11 @@ class DayOfWeekTypeTest extends TestCase
         return Type::getType('DayOfWeek');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?DayOfWeek $value, ?int $expectedValue): void
     {
         $type = $this->getDayOfWeekType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -47,15 +45,13 @@ class DayOfWeekTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getDayOfWeekType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -71,13 +67,11 @@ class DayOfWeekTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
-    public function testConvertToPHPValue($value, ?int $expectedDayOfWeekValue): void
+    #[DataProvider('providerConvertToPHPValue')]
+    public function testConvertToPHPValue(mixed $value, ?int $expectedDayOfWeekValue): void
     {
         $type = $this->getDayOfWeekType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedDayOfWeekValue === null) {
             self::assertNull($actualValue);
@@ -101,24 +95,21 @@ class DayOfWeekTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
-    public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionMessage): void
     {
         $type = $this->getDayOfWeekType();
 
-        $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, ValueError::class],
-            [8, ValueError::class],
-            ['1', ConversionException::class],
-            ['2', ConversionException::class],
+            [0, '0 is not a valid backing value for enum'],
+            [8, '8 is not a valid backing value for enum'],
         ];
     }
 }

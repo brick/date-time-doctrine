@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
-use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Doctrine\Types\LocalDateTimeType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,13 +22,11 @@ class LocalDateTimeTypeTest extends TestCase
         return Type::getType('LocalDateTime');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalDateTime $value, ?string $expectedValue): void
     {
         $type = $this->getLocalDateTimeType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -39,19 +37,18 @@ class LocalDateTimeTypeTest extends TestCase
             [null, null],
             [LocalDateTime::of(2021, 4, 17, 9, 2), '2021-04-17 09:02:00'],
             [LocalDateTime::of(2021, 4, 17, 9, 2, 7), '2021-04-17 09:02:07'],
-            [LocalDateTime::of(2021, 4, 17, 9, 2, 0, 7000000), '2021-04-17 09:02:00.007'],
+            [LocalDateTime::of(2021, 4, 17, 9, 2, 0, 7_000_000), '2021-04-17 09:02:00.007'],
+            [LocalDateTime::of(2021, 4, 17, 9, 2, 1, 7_000_000), '2021-04-17 09:02:01.007'],
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getLocalDateTimeType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -68,13 +65,11 @@ class LocalDateTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
-    public function testConvertToPHPValue($value, ?string $expectedLocalDateTimeString): void
+    #[DataProvider('providerConvertToPHPValue')]
+    public function testConvertToPHPValue(mixed $value, ?string $expectedLocalDateTimeString): void
     {
         $type = $this->getLocalDateTimeType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedLocalDateTimeString === null) {
             self::assertNull($actualValue);
@@ -95,24 +90,23 @@ class LocalDateTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
-    public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionMessage): void
     {
         $type = $this->getLocalDateTimeType();
 
-        $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, DateTimeException::class],
-            ['01:02:59', DateTimeException::class],
-            ['2021-04-17', DateTimeException::class],
-            ['2021-04-17Z01:02:03.456', DateTimeException::class],
+            [0, 'Failed to parse "0"'],
+            ['01:02:59', 'Failed to parse "01:02:59".'],
+            ['2021-04-17', 'Failed to parse "2021-04-17".'],
+            ['2021-04-17Z01:02:03.456', 'Failed to parse "2021-04-17Z01:02:03.456".'],
         ];
     }
 }

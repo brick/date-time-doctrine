@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Types;
 
+use Brick\DateTime\DateTimeException;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -16,17 +18,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class LocalTimeType extends Type
 {
-    public function getName(): string
-    {
-        return 'LocalTime';
-    }
-
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getTimeTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -42,24 +39,28 @@ final class LocalTimeType extends Type
             return $stringValue;
         }
 
-        throw ConversionException::conversionFailedInvalidType(
+        throw InvalidType::new(
             $value,
-            $this->getName(),
-            [LocalTime::class, 'null']
+            static::class,
+            [LocalTime::class, 'null'],
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?LocalTime
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?LocalTime
     {
         if ($value === null) {
             return null;
         }
 
-        return LocalTime::parse((string) $value);
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
+        try {
+            return LocalTime::parse((string) $value);
+        } catch (DateTimeException $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                LocalTime::class,
+                $e->getMessage(),
+                $e,
+            );
+        }
     }
 }
