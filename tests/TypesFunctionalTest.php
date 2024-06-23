@@ -92,7 +92,7 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         $entity = new KitchenSink();
 
         $entity->instant = Instant::of(1234567890);
-        $entity->dayOfWeek = DayOfWeek::friday();
+        $entity->dayOfWeek = DayOfWeek::FRIDAY;
         $entity->localDate = LocalDate::parse('2021-04-17');
         $entity->localTime = LocalTime::parse('06:31:45');
         $entity->localDateTime = LocalDateTime::parse('2017-01-16T10:01:02');
@@ -120,7 +120,7 @@ class TypesFunctionalTest extends AbstractFunctionalTestCase
         self::assertNotNull($entity);
 
         self::assertInstanceOf(DayOfWeek::class, $entity->dayOfWeek);
-        self::assertSame(5, $entity->dayOfWeek->getValue());
+        self::assertSame(5, $entity->dayOfWeek->value);
 
         self::assertInstanceOf(Instant::class, $entity->instant);
         self::assertSame(1234567890, $entity->instant->getEpochSecond());
