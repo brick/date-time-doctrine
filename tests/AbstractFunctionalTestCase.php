@@ -7,33 +7,31 @@ namespace Brick\DateTime\Doctrine\Tests;
 use Brick\DateTime\Doctrine\Tests\Entity\KitchenSink;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractFunctionalTestCase extends TestCase
 {
     final protected static function createConnection(): Connection
     {
-        return DriverManager::getConnection(['url' => 'sqlite:///:memory:']);
+        $dsnParser = new DsnParser(['sqlite' => 'pdo_sqlite']);
+
+        return DriverManager::getConnection(
+            $dsnParser->parse('sqlite:///:memory:'),
+        );
     }
 
     final protected static function createEntityManager(Connection $connection): EntityManager
     {
-        return EntityManager::create($connection, self::createConfiguration());
+        return new EntityManager($connection, self::createConfiguration());
     }
 
     private static function createConfiguration(): Configuration
     {
-        $config = new Configuration();
-
-        $driverImpl = $config->newDefaultAnnotationDriver([__DIR__ . '/tests/Entity'], false);
-        $config->setMetadataDriverImpl($driverImpl);
-
-        $config->setProxyDir(sys_get_temp_dir());
-        $config->setProxyNamespace('Brick\DateTime\Doctrine\Tests\Proxy');
-
-        return $config;
+        return ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/tests/Entity']);
     }
 
     final protected static function truncateEntityTable(EntityManager $em): void

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
-use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Doctrine\Types\LocalDateType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,13 +22,11 @@ class LocalDateTypeTest extends TestCase
         return Type::getType('LocalDate');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalDate $value, ?string $expectedValue): void
     {
         $type = $this->getLocalDateType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -41,15 +39,13 @@ class LocalDateTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getLocalDateType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -65,13 +61,11 @@ class LocalDateTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
-    public function testConvertToPHPValue($value, ?string $expectedLocalDateString): void
+    #[DataProvider('providerConvertToPHPValue')]
+    public function testConvertToPHPValue(mixed $value, ?string $expectedLocalDateString): void
     {
         $type = $this->getLocalDateType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedLocalDateString === null) {
             self::assertNull($actualValue);
@@ -89,23 +83,22 @@ class LocalDateTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
-    public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionMessage): void
     {
         $type = $this->getLocalDateType();
 
-        $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, DateTimeException::class],
-            ['10:31:00', DateTimeException::class],
-            ['2021-04-00', DateTimeException::class],
+            [0, 'Failed to parse "0".'],
+            ['10:31:00', 'Failed to parse "10:31:00".'],
+            ['2021-04-00', 'Invalid day-of-month: 0 is not in the range 1 to 31.'],
         ];
     }
 }

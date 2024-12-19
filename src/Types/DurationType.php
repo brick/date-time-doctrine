@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Types;
 
+use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Duration;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -16,21 +18,16 @@ use Doctrine\DBAL\Types\Type;
  */
 final class DurationType extends Type
 {
-    public function getName(): string
-    {
-        return 'Duration';
-    }
-
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         if (!isset($column['length'])) {
             $column['length'] = 64;
         }
 
-        return $platform->getVarcharTypeDeclarationSQL($column);
+        return $platform->getStringTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -40,24 +37,28 @@ final class DurationType extends Type
             return (string) $value;
         }
 
-        throw ConversionException::conversionFailedInvalidType(
+        throw InvalidType::new(
             $value,
-            $this->getName(),
-            [Duration::class, 'null']
+            static::class,
+            [Duration::class, 'null'],
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?Duration
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Duration
     {
         if ($value === null) {
             return null;
         }
 
-        return Duration::parse((string) $value);
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
+        try {
+            return Duration::parse((string) $value);
+        } catch (DateTimeException $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                Duration::class,
+                $e->getMessage(),
+                $e,
+            );
+        }
     }
 }

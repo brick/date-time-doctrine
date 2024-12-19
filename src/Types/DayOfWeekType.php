@@ -6,9 +6,11 @@ namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\DayOfWeek;
 use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use ValueError;
 
 /**
  * Doctrine type for DayOfWeek.
@@ -17,17 +19,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  */
 final class DayOfWeekType extends Type
 {
-    public function getName(): string
-    {
-        return 'DayOfWeek';
-    }
-
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getSmallIntTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
             return null;
@@ -37,37 +34,33 @@ final class DayOfWeekType extends Type
             return $value->value;
         }
 
-        throw ConversionException::conversionFailedInvalidType(
+        throw InvalidType::new(
             $value,
-            $this->getName(),
-            [DayOfWeek::class, 'null']
+            static::class,
+            [DayOfWeek::class, 'null'],
         );
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?DayOfWeek
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DayOfWeek
     {
         if ($value === null) {
             return null;
         }
 
-        if (is_int($value)) {
-            return DayOfWeek::from($value);
+        try {
+            return DayOfWeek::from((int) $value);
+        } catch (ValueError $e) {
+            throw ValueNotConvertible::new(
+                $value,
+                DayOfWeek::class,
+                $e->getMessage(),
+                $e,
+            );
         }
-
-        throw ConversionException::conversionFailedInvalidType(
-            $value,
-            $this->getName(),
-            [DayOfWeek::class, 'null']
-        );
     }
 
-    public function getBindingType(): int
+    public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
     }
 }

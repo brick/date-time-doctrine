@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
-use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Doctrine\Types\LocalTimeType;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
 use Brick\DateTime\LocalDateTime;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,13 +22,11 @@ class LocalTimeTypeTest extends TestCase
         return Type::getType('LocalTime');
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValue
-     */
+    #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalTime $value, ?string $expectedValue): void
     {
         $type = $this->getLocalTimeType();
-        $actualValue = $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToDatabaseValue($value, new SQLitePlatform());
 
         self::assertSame($expectedValue, $actualValue);
     }
@@ -39,19 +37,18 @@ class LocalTimeTypeTest extends TestCase
             [null, null],
             [LocalTime::of(9, 2), '09:02:00'],
             [LocalTime::of(10, 31, 1), '10:31:01'],
-            [LocalTime::of(10, 31, 1, 7000000), '10:31:01.007'],
+            [LocalTime::of(10, 31, 0, 7_000_000), '10:31:00.007'],
+            [LocalTime::of(10, 31, 1, 7_000_000), '10:31:01.007'],
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToDatabaseValueWithInvalidValue
-     */
-    public function testConvertToDatabaseValueWithInvalidValue($value): void
+    #[DataProvider('providerConvertToDatabaseValueWithInvalidValue')]
+    public function testConvertToDatabaseValueWithInvalidValue(mixed $value): void
     {
         $type = $this->getLocalTimeType();
 
         $this->expectException(ConversionException::class);
-        $type->convertToDatabaseValue($value, new SqlitePlatform());
+        $type->convertToDatabaseValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToDatabaseValueWithInvalidValue(): array
@@ -67,13 +64,11 @@ class LocalTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValue
-     */
-    public function testConvertToPHPValue($value, ?string $expectedLocalTimeString): void
+    #[DataProvider('providerConvertToPHPValue')]
+    public function testConvertToPHPValue(mixed $value, ?string $expectedLocalTimeString): void
     {
         $type = $this->getLocalTimeType();
-        $actualValue = $type->convertToPHPValue($value, new SqlitePlatform());
+        $actualValue = $type->convertToPHPValue($value, new SQLitePlatform());
 
         if ($expectedLocalTimeString === null) {
             self::assertNull($actualValue);
@@ -92,23 +87,22 @@ class LocalTimeTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConvertToPHPValueWithInvalidValue
-     */
-    public function testConvertToPHPValueWithInvalidValue($value, string $expectedExceptionClass): void
+    #[DataProvider('providerConvertToPHPValueWithInvalidValue')]
+    public function testConvertToPHPValueWithInvalidValue(mixed $value, string $expectedExceptionMessage): void
     {
         $type = $this->getLocalTimeType();
 
-        $this->expectException($expectedExceptionClass);
-        $type->convertToPHPValue($value, new SqlitePlatform());
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $type->convertToPHPValue($value, new SQLitePlatform());
     }
 
     public static function providerConvertToPHPValueWithInvalidValue(): array
     {
         return [
-            [0, DateTimeException::class],
-            ['01:02:60', DateTimeException::class],
-            ['2021-04-17', DateTimeException::class],
+            [0, 'Failed to parse "0".'],
+            ['01:02:60', 'Invalid second-of-minute: 60 is not in the range 0 to 59.'],
+            ['2021-04-17', 'Failed to parse "2021-04-17".'],
         ];
     }
 }
