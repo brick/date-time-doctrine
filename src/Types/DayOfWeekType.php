@@ -6,10 +6,10 @@ namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\DayOfWeek;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use ValueError;
 
 /**

@@ -17,11 +17,6 @@ use stdClass;
 
 class LocalDateTypeTest extends TestCase
 {
-    private function getLocalDateType(): LocalDateType
-    {
-        return Type::getType('LocalDate');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalDate $value, ?string $expectedValue): void
     {
@@ -57,7 +52,7 @@ class LocalDateTypeTest extends TestCase
             ['2017-01-16'],
             [new stdClass()],
             [LocalDateTime::parse('2017-01-16T10:31:00')],
-            [LocalTime::parse('10:31:00')]
+            [LocalTime::parse('10:31:00')],
         ];
     }
 
@@ -100,5 +95,10 @@ class LocalDateTypeTest extends TestCase
             ['10:31:00', 'Failed to parse "10:31:00".'],
             ['2021-04-00', 'Invalid day-of-month: 0 is not in the range 1 to 31.'],
         ];
+    }
+
+    private function getLocalDateType(): LocalDateType
+    {
+        return Type::getType('LocalDate');
     }
 }

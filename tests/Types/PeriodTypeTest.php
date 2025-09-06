@@ -6,8 +6,8 @@ namespace Brick\DateTime\Doctrine\Tests\Types;
 
 use Brick\DateTime\Doctrine\Types\PeriodType;
 use Brick\DateTime\LocalDate;
-use Brick\DateTime\Period;
 use Brick\DateTime\LocalTime;
+use Brick\DateTime\Period;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -17,11 +17,6 @@ use stdClass;
 
 class PeriodTypeTest extends TestCase
 {
-    private function getPeriodType(): PeriodType
-    {
-        return Type::getType('Period');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?Period $value, ?string $expectedValue): void
     {
@@ -57,7 +52,7 @@ class PeriodTypeTest extends TestCase
             ['2017-01-16'],
             [new stdClass()],
             [LocalDate::parse('2017-01-16')],
-            [LocalTime::parse('10:31:00')]
+            [LocalTime::parse('10:31:00')],
         ];
     }
 
@@ -100,5 +95,10 @@ class PeriodTypeTest extends TestCase
             ['10:31:00', 'Text cannot be parsed to a Period: 10:31:00'],
             ['2021-04-00', 'Text cannot be parsed to a Period: 2021-04-00'],
         ];
+    }
+
+    private function getPeriodType(): PeriodType
+    {
+        return Type::getType('Period');
     }
 }

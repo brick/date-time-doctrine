@@ -17,11 +17,6 @@ use stdClass;
 
 class LocalDateTimeTypeTest extends TestCase
 {
-    private function getLocalDateTimeType(): LocalDateTimeType
-    {
-        return Type::getType('LocalDateTime');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalDateTime $value, ?string $expectedValue): void
     {
@@ -108,5 +103,10 @@ class LocalDateTimeTypeTest extends TestCase
             ['2021-04-17', 'Failed to parse "2021-04-17".'],
             ['2021-04-17Z01:02:03.456', 'Failed to parse "2021-04-17Z01:02:03.456".'],
         ];
+    }
+
+    private function getLocalDateTimeType(): LocalDateTimeType
+    {
+        return Type::getType('LocalDateTime');
     }
 }

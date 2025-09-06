@@ -6,8 +6,8 @@ namespace Brick\DateTime\Doctrine\Tests\Types;
 
 use Brick\DateTime\Doctrine\Types\LocalTimeType;
 use Brick\DateTime\LocalDate;
-use Brick\DateTime\LocalTime;
 use Brick\DateTime\LocalDateTime;
+use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -17,11 +17,6 @@ use stdClass;
 
 class LocalTimeTypeTest extends TestCase
 {
-    private function getLocalTimeType(): LocalTimeType
-    {
-        return Type::getType('LocalTime');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?LocalTime $value, ?string $expectedValue): void
     {
@@ -83,7 +78,7 @@ class LocalTimeTypeTest extends TestCase
         return [
             [null, null],
             ['01:02:03', '01:02:03'],
-            ['01:02:03.001', '01:02:03.001']
+            ['01:02:03.001', '01:02:03.001'],
         ];
     }
 
@@ -104,5 +99,10 @@ class LocalTimeTypeTest extends TestCase
             ['01:02:60', 'Invalid second-of-minute: 60 is not in the range 0 to 59.'],
             ['2021-04-17', 'Failed to parse "2021-04-17".'],
         ];
+    }
+
+    private function getLocalTimeType(): LocalTimeType
+    {
+        return Type::getType('LocalTime');
     }
 }

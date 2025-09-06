@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
 use Brick\DateTime\Doctrine\Types\DurationType;
-use Brick\DateTime\LocalDate;
 use Brick\DateTime\Duration;
+use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Types\ConversionException;
@@ -17,11 +17,6 @@ use stdClass;
 
 class DurationTypeTest extends TestCase
 {
-    private function getDurationType(): DurationType
-    {
-        return Type::getType('Duration');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?Duration $value, ?string $expectedValue): void
     {
@@ -57,7 +52,7 @@ class DurationTypeTest extends TestCase
             ['2017-01-16'],
             [new stdClass()],
             [LocalDate::parse('2017-01-16')],
-            [LocalTime::parse('10:31:00')]
+            [LocalTime::parse('10:31:00')],
         ];
     }
 
@@ -100,5 +95,10 @@ class DurationTypeTest extends TestCase
             ['10:31:00', 'Text cannot be parsed to a Duration: 10:31:00'],
             ['2021-04-00', 'Text cannot be parsed to a Duration: 2021-04-00'],
         ];
+    }
+
+    private function getDurationType(): DurationType
+    {
+        return Type::getType('Duration');
     }
 }

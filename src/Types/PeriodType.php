@@ -20,7 +20,7 @@ final class PeriodType extends Type
 {
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        if (!isset($column['length'])) {
+        if (! isset($column['length'])) {
             $column['length'] = 64;
         }
 

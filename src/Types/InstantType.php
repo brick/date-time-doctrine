@@ -6,9 +6,9 @@ namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\Instant;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * Doctrine type for Instant.

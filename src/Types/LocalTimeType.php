@@ -6,10 +6,10 @@ namespace Brick\DateTime\Doctrine\Types;
 
 use Brick\DateTime\DateTimeException;
 use Brick\DateTime\LocalTime;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * Doctrine type for LocalTime.

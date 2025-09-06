@@ -17,11 +17,6 @@ use stdClass;
 
 class DayOfWeekTypeTest extends TestCase
 {
-    private function getDayOfWeekType(): DayOfWeekType
-    {
-        return Type::getType('DayOfWeek');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?DayOfWeek $value, ?int $expectedValue): void
     {
@@ -63,7 +58,7 @@ class DayOfWeekTypeTest extends TestCase
             ['string'],
             [new stdClass()],
             [LocalDate::parse('2021-04-17')],
-            [LocalTime::parse('06:31:00')]
+            [LocalTime::parse('06:31:00')],
         ];
     }
 
@@ -111,5 +106,10 @@ class DayOfWeekTypeTest extends TestCase
             [0, '0 is not a valid backing value for enum'],
             [8, '8 is not a valid backing value for enum'],
         ];
+    }
+
+    private function getDayOfWeekType(): DayOfWeekType
+    {
+        return Type::getType('DayOfWeek');
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Brick\DateTime\Doctrine\Tests\Types;
 
-use Brick\DateTime\Instant;
 use Brick\DateTime\Doctrine\Types\InstantType;
+use Brick\DateTime\Instant;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalTime;
 use Doctrine\DBAL\Platforms\SQLitePlatform;
@@ -17,11 +17,6 @@ use stdClass;
 
 class InstantTypeTest extends TestCase
 {
-    private function getInstantType(): InstantType
-    {
-        return Type::getType('Instant');
-    }
-
     #[DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(?Instant $value, ?int $expectedValue): void
     {
@@ -58,7 +53,7 @@ class InstantTypeTest extends TestCase
             ['string'],
             [new stdClass()],
             [LocalDate::parse('2017-01-16')],
-            [LocalTime::parse('10:31:00')]
+            [LocalTime::parse('10:31:00')],
         ];
     }
 
@@ -84,5 +79,10 @@ class InstantTypeTest extends TestCase
             [2000000000, 2000000000],
             ['2000000001', 2000000001],
         ];
+    }
+
+    private function getInstantType(): InstantType
+    {
+        return Type::getType('Instant');
     }
 }

@@ -29,11 +29,6 @@ abstract class AbstractFunctionalTestCase extends TestCase
         return new EntityManager($connection, self::createConfiguration());
     }
 
-    private static function createConfiguration(): Configuration
-    {
-        return ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/tests/Entity']);
-    }
-
     final protected static function truncateEntityTable(EntityManager $em): void
     {
         $em->createQueryBuilder()
@@ -49,5 +44,10 @@ abstract class AbstractFunctionalTestCase extends TestCase
             ->from(KitchenSink::class, 's')
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    private static function createConfiguration(): Configuration
+    {
+        return ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/tests/Entity']);
     }
 }
