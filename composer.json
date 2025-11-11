@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "brick/date-time": "~0.6.0 || ~0.7.0",
+        "brick/date-time": "~0.6.0 || ~0.7.0 || ~0.8.0",
         "doctrine/dbal": "^4.0",
         "doctrine/orm": "^3.0",
         "php": "^8.1"
