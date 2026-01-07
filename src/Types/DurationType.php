@@ -10,6 +10,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
+use Override;
 
 /**
  * Doctrine type for Duration.
@@ -18,6 +19,7 @@ use Doctrine\DBAL\Types\Type;
  */
 final class DurationType extends Type
 {
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         if (! isset($column['length'])) {
@@ -27,6 +29,7 @@ final class DurationType extends Type
         return $platform->getStringTypeDeclarationSQL($column);
     }
 
+    #[Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
@@ -44,6 +47,7 @@ final class DurationType extends Type
         );
     }
 
+    #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Duration
     {
         if ($value === null) {

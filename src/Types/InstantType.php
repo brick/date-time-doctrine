@@ -9,6 +9,7 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Type;
+use Override;
 
 /**
  * Doctrine type for Instant.
@@ -17,11 +18,13 @@ use Doctrine\DBAL\Types\Type;
  */
 final class InstantType extends Type
 {
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getIntegerTypeDeclarationSQL($column);
     }
 
+    #[Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
@@ -39,6 +42,7 @@ final class InstantType extends Type
         );
     }
 
+    #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Instant
     {
         if ($value === null) {
@@ -48,6 +52,7 @@ final class InstantType extends Type
         return Instant::of((int) $value);
     }
 
+    #[Override]
     public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;

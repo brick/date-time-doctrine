@@ -10,6 +10,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
+use Override;
 use ValueError;
 
 /**
@@ -19,11 +20,13 @@ use ValueError;
  */
 final class DayOfWeekType extends Type
 {
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getSmallIntTypeDeclarationSQL($column);
     }
 
+    #[Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
@@ -41,6 +44,7 @@ final class DayOfWeekType extends Type
         );
     }
 
+    #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DayOfWeek
     {
         if ($value === null) {
@@ -59,6 +63,7 @@ final class DayOfWeekType extends Type
         }
     }
 
+    #[Override]
     public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;
