@@ -28,7 +28,7 @@ composer require brick/date-time-doctrine
 Requirements
 ------------
 
-This library requires PHP 8.1 or later.
+This library requires PHP 8.2 or later.
 
 Project status & release process
 --------------------------------
