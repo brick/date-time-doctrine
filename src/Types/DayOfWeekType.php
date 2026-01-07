@@ -39,7 +39,7 @@ final class DayOfWeekType extends Type
 
         throw InvalidType::new(
             $value,
-            static::class,
+            self::class,
             [DayOfWeek::class, 'null'],
         );
     }

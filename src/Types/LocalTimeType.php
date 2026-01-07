@@ -44,7 +44,7 @@ final class LocalTimeType extends Type
 
         throw InvalidType::new(
             $value,
-            static::class,
+            self::class,
             [LocalTime::class, 'null'],
         );
     }

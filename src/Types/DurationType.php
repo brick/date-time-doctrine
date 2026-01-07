@@ -42,7 +42,7 @@ final class DurationType extends Type
 
         throw InvalidType::new(
             $value,
-            static::class,
+            self::class,
             [Duration::class, 'null'],
         );
     }

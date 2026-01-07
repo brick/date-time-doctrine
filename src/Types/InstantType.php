@@ -37,7 +37,7 @@ final class InstantType extends Type
 
         throw InvalidType::new(
             $value,
-            static::class,
+            self::class,
             [Instant::class, 'null'],
         );
     }
