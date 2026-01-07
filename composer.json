@@ -19,7 +19,7 @@
         "ext-pdo_sqlite": "*",
         "phpunit/phpunit": "^10.5",
         "php-coveralls/php-coveralls": "^2.4",
-        "vimeo/psalm": "6.3.0",
+        "vimeo/psalm": "6.14.3",
         "guzzlehttp/guzzle": "^7.0",
         "symfony/cache": "^5.0 || ^6.0 || ^7.0"
     },
