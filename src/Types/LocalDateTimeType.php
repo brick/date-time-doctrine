@@ -58,6 +58,7 @@ final class LocalDateTimeType extends Type
             return null;
         }
 
+        /** @phpstan-ignore cast.string */
         $value = str_replace(' ', 'T', (string) $value);
 
         try {

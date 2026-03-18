@@ -55,6 +55,7 @@ final class PeriodType extends Type
         }
 
         try {
+            /** @phpstan-ignore cast.string */
             return Period::parse((string) $value);
         } catch (DateTimeException $e) {
             throw ValueNotConvertible::new(

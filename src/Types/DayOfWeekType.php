@@ -52,6 +52,7 @@ final class DayOfWeekType extends Type
         }
 
         try {
+            /** @phpstan-ignore cast.int */
             return DayOfWeek::from((int) $value);
         } catch (ValueError $e) {
             throw ValueNotConvertible::new(

@@ -49,6 +49,7 @@ final class InstantType extends Type
             return null;
         }
 
+        /** @phpstan-ignore cast.int */
         return Instant::of((int) $value);
     }
 

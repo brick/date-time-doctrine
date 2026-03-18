@@ -55,6 +55,7 @@ final class DurationType extends Type
         }
 
         try {
+            /** @phpstan-ignore cast.string */
             return Duration::parse((string) $value);
         } catch (DateTimeException $e) {
             throw ValueNotConvertible::new(

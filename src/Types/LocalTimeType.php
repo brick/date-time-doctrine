@@ -57,6 +57,7 @@ final class LocalTimeType extends Type
         }
 
         try {
+            /** @phpstan-ignore cast.string */
             return LocalTime::parse((string) $value);
         } catch (DateTimeException $e) {
             throw ValueNotConvertible::new(
