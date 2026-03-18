@@ -99,6 +99,6 @@ class LocalDateTypeTest extends TestCase
 
     private function getLocalDateType(): LocalDateType
     {
-        return Type::getType('LocalDate');
+        return Type::getType(LocalDateType::NAME);
     }
 }

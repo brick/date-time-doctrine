@@ -19,6 +19,8 @@ use Override;
  */
 final class DurationType extends Type
 {
+    public const NAME = 'Duration';
+
     #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {

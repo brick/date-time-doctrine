@@ -20,6 +20,8 @@ use ValueError;
  */
 final class DayOfWeekType extends Type
 {
+    public const NAME = 'DayOfWeek';
+
     #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {

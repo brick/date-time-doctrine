@@ -110,6 +110,6 @@ class DayOfWeekTypeTest extends TestCase
 
     private function getDayOfWeekType(): DayOfWeekType
     {
-        return Type::getType('DayOfWeek');
+        return Type::getType(DayOfWeekType::NAME);
     }
 }
