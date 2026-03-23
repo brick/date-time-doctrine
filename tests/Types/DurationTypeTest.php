@@ -99,6 +99,6 @@ class DurationTypeTest extends TestCase
 
     private function getDurationType(): DurationType
     {
-        return Type::getType('Duration');
+        return Type::getType(DurationType::NAME);
     }
 }
