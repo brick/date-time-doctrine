@@ -19,6 +19,8 @@ use Override;
  */
 final class LocalDateType extends Type
 {
+    public const NAME = 'LocalDate';
+
     #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {

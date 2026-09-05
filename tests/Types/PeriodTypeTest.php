@@ -99,6 +99,6 @@ class PeriodTypeTest extends TestCase
 
     private function getPeriodType(): PeriodType
     {
-        return Type::getType('Period');
+        return Type::getType(PeriodType::NAME);
     }
 }

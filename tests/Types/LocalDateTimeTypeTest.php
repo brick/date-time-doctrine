@@ -107,6 +107,6 @@ class LocalDateTimeTypeTest extends TestCase
 
     private function getLocalDateTimeType(): LocalDateTimeType
     {
-        return Type::getType('LocalDateTime');
+        return Type::getType(LocalDateTimeType::NAME);
     }
 }

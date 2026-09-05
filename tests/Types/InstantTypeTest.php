@@ -83,6 +83,6 @@ class InstantTypeTest extends TestCase
 
     private function getInstantType(): InstantType
     {
-        return Type::getType('Instant');
+        return Type::getType(InstantType::NAME);
     }
 }

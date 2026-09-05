@@ -21,6 +21,8 @@ use function str_replace;
  */
 final class LocalDateTimeType extends Type
 {
+    public const NAME = 'LocalDateTime';
+
     #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {

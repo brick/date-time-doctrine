@@ -19,6 +19,8 @@ use Override;
  */
 final class PeriodType extends Type
 {
+    public const NAME = 'Period';
+
     #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
