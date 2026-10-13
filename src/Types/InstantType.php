@@ -18,6 +18,8 @@ use Override;
  */
 final class InstantType extends Type
 {
+    public const NAME = 'Instant';
+
     #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
