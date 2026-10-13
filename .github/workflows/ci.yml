@@ -34,41 +34,22 @@ jobs:
     with:
       working-directory: "tools/ecs"
 
-  # Builds the list of supported versions from what's in composer.json so we don't have to manage the compatibility list here manually
-  brick-date-time-constraints:
-    name: brick/date-time constraints
-    runs-on: ubuntu-latest
-
-    outputs:
-      constraints: ${{ steps.constraints.outputs.constraints }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Split brick/date-time constraint from composer.json
-        id: constraints
-        run: echo "constraints=$(jq -c '.require["brick/date-time"] | [splits(" *\\|\\|? *")]' composer.json)" >> "$GITHUB_OUTPUT"
-
   phpunit:
     name: PHPUnit
     runs-on: ubuntu-latest
-    needs: brick-date-time-constraints
 
     strategy:
       fail-fast: false
       matrix:
         php-version:
-          - "8.2"
           - "8.3"
           - "8.4"
           - "8.5"
           - "8.6"
-        brick-date-time: ${{ fromJSON(needs.brick-date-time-constraints.outputs.constraints) }}
         deps:
           - "highest"
         include:
-          - php-version: "8.2"
+          - php-version: "8.3"
             deps: "lowest"
 
     steps:
@@ -80,12 +61,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           coverage: xdebug
-
-      - name: Restrict brick/date-time version
-        run: composer require --no-update "brick/date-time:$BRICK_DATE_TIME_CONSTRAINT"
-        env:
-          BRICK_DATE_TIME_CONSTRAINT: ${{ matrix.brick-date-time }}
-        if: ${{ matrix.brick-date-time }}
 
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
@@ -105,3 +80,55 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         if: ${{ matrix.php-version == env.COVERAGE_PHP_VERSION }}
+
+
+  # Builds the list of supported versions from what's in composer.json so we don't have to manage the compatibility list here manually
+  brick-date-time-constraints:
+    name: brick/date-time constraints
+    runs-on: ubuntu-latest
+
+    outputs:
+      constraints: ${{ steps.constraints.outputs.constraints }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Split brick/date-time constraint from composer.json
+        id: constraints
+        run: echo "constraints=$(jq -c '.require["brick/date-time"] | [splits(" *\\|\\|? *")]' composer.json)" >> "$GITHUB_OUTPUT"
+
+  phpunit-php-8-2:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    needs: brick-date-time-constraints
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.2"
+        brick-date-time: ${{ fromJSON(needs.brick-date-time-constraints.outputs.constraints) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: Restrict brick/date-time version
+        run: composer require --no-update "brick/date-time:$BRICK_DATE_TIME_CONSTRAINT"
+        env:
+          BRICK_DATE_TIME_CONSTRAINT: ${{ matrix.brick-date-time }}
+
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: lowest
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
