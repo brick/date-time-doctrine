@@ -46,11 +46,6 @@ jobs:
           - "8.4"
           - "8.5"
           - "8.6"
-        deps:
-          - "highest"
-        include:
-          - php-version: "8.3"
-            deps: "lowest"
 
     steps:
       - name: Checkout
@@ -65,7 +60,7 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
         with:
-          dependency-versions: ${{ matrix.deps }}
+          dependency-versions: highest
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit
@@ -81,34 +76,21 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         if: ${{ matrix.php-version == env.COVERAGE_PHP_VERSION }}
 
-
-  # Builds the list of supported versions from what's in composer.json so we don't have to manage the compatibility list here manually
-  brick-date-time-constraints:
-    name: brick/date-time constraints
-    runs-on: ubuntu-latest
-
-    outputs:
-      constraints: ${{ steps.constraints.outputs.constraints }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Split brick/date-time constraint from composer.json
-        id: constraints
-        run: echo "constraints=$(jq -c '.require["brick/date-time"] | [splits(" *\\|\\|? *")]' composer.json)" >> "$GITHUB_OUTPUT"
-
   phpunit-php-8-2:
     name: PHPUnit
     runs-on: ubuntu-latest
-    needs: brick-date-time-constraints
 
     strategy:
       fail-fast: false
       matrix:
         php-version:
           - "8.2"
-        brick-date-time: ${{ fromJSON(needs.brick-date-time-constraints.outputs.constraints) }}
+        brick-date-time:
+          - "0.6"
+          - "0.7"
+          - "0.8"
+          - "0.9"
+          - "0.10"
 
     steps:
       - name: Checkout
@@ -128,7 +110,7 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
         with:
-          dependency-versions: lowest
+          dependency-versions: highest
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit
