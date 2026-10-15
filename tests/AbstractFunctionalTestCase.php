@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use PHPUnit\Framework\TestCase;
 
+use function method_exists;
+
 use const PHP_VERSION_ID;
 
 abstract class AbstractFunctionalTestCase extends TestCase
@@ -52,7 +54,7 @@ abstract class AbstractFunctionalTestCase extends TestCase
     {
         $configuration = ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/tests/Entity']);
 
-        if (PHP_VERSION_ID >= 80400) {
+        if (PHP_VERSION_ID >= 80400 && method_exists($configuration, 'enableNativeLazyObjects')) {
             $configuration->enableNativeLazyObjects(true);
         }
 

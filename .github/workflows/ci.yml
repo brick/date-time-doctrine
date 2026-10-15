@@ -6,7 +6,6 @@ on:
 
 env:
   PHPSTAN_PHP_VERSION: "8.5"
-  COVERAGE_PHP_VERSION: "8.5"
 
 jobs:
   phpstan:
@@ -48,10 +47,12 @@ jobs:
           - "8.5"
           - "8.6"
         deps:
+          - "lowest"
           - "highest"
         include:
-          - php-version: "8.2"
-            deps: "lowest"
+          - php-version: "8.5"
+            deps: "highest"
+            coverage: "xdebug"
 
     steps:
       - name: Checkout
@@ -61,7 +62,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          coverage: xdebug
+          coverage: ${{ matrix.coverage || 'none' }}
 
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
@@ -70,14 +71,56 @@ jobs:
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit
-        if: ${{ matrix.php-version != env.COVERAGE_PHP_VERSION }}
+        if: ${{ matrix.coverage != 'xdebug' }}
 
       - name: Run PHPUnit with coverage
         run: vendor/bin/phpunit --coverage-clover clover.xml
-        if: ${{ matrix.php-version == env.COVERAGE_PHP_VERSION }}
+        if: ${{ matrix.coverage == 'xdebug' }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ matrix.php-version == env.COVERAGE_PHP_VERSION }}
+        if: ${{ matrix.coverage == 'xdebug' }}
+
+  phpunit-php-8-2:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.2"
+        brick-date-time-version:
+          - "0.6"
+          - "0.7"
+          - "0.8"
+          - "0.9"
+          - "0.10"
+        deps:
+          - "lowest"
+          - "highest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: Restrict brick/date-time version
+        run: composer require --no-update "brick/date-time:$BRICK_DATE_TIME_CONSTRAINT"
+        env:
+          BRICK_DATE_TIME_CONSTRAINT: ${{ matrix.brick-date-time-version }}
+
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.deps }}
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
