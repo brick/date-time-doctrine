@@ -6,7 +6,6 @@ on:
 
 env:
   PHPSTAN_PHP_VERSION: "8.5"
-  COVERAGE_PHP_VERSION: "8.5"
 
 jobs:
   phpstan:
@@ -50,6 +49,10 @@ jobs:
         deps:
           - "lowest"
           - "highest"
+        include:
+          - php-version: "8.5"
+            deps: "highest"
+            coverage: "xdebug"
 
     steps:
       - name: Checkout
@@ -59,7 +62,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          coverage: xdebug
+          coverage: ${{ matrix.coverage || 'none' }}
 
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
@@ -68,17 +71,17 @@ jobs:
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit
-        if: ${{ matrix.php-version != env.COVERAGE_PHP_VERSION }}
+        if: ${{ matrix.coverage != 'xdebug' }}
 
       - name: Run PHPUnit with coverage
         run: vendor/bin/phpunit --coverage-clover clover.xml
-        if: ${{ matrix.php-version == env.COVERAGE_PHP_VERSION }}
+        if: ${{ matrix.coverage == 'xdebug' }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ matrix.php-version == env.COVERAGE_PHP_VERSION }}
+        if: ${{ matrix.coverage == 'xdebug' }}
 
   phpunit-php-8-2:
     name: PHPUnit
