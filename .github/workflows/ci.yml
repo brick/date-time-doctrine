@@ -89,7 +89,7 @@ jobs:
       matrix:
         php-version:
           - "8.2"
-        brick-date-time:
+        brick-date-time-version:
           - "0.6"
           - "0.7"
           - "0.8"
@@ -112,7 +112,7 @@ jobs:
       - name: Restrict brick/date-time version
         run: composer require --no-update "brick/date-time:$BRICK_DATE_TIME_CONSTRAINT"
         env:
-          BRICK_DATE_TIME_CONSTRAINT: ${{ matrix.brick-date-time }}
+          BRICK_DATE_TIME_CONSTRAINT: ${{ matrix.brick-date-time-version }}
 
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
